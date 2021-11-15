@@ -8,7 +8,7 @@
 import UIKit
 import SafariServices
 
-class ViewController: UIViewController, SFSafariViewControllerDelegate
+class ViewController: UIViewController, SFSafariViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
 
     @IBOutlet var choices: [UIImageView]!
@@ -21,6 +21,11 @@ class ViewController: UIViewController, SFSafariViewControllerDelegate
     var timeElapsed:Float = 0.0
     var timeAllowed:Float = 3.0
     var timer:Timer?
+    var imagePicker = UIImagePickerController()
+    var cameraPopup = UIImagePickerController()
+    var imgToChange:UIImageView?
+    var presentingCamera = false
+    var typeOfSelection:String?
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -37,11 +42,21 @@ class ViewController: UIViewController, SFSafariViewControllerDelegate
         if(self.myChoice != -1){
             timer?.invalidate()
             timer = nil
+            
             var name = "hjkl;'"
-            if(computerChoice == 0){name = "rock"}
-            if(computerChoice == 1){name = "paper"}
-            if(computerChoice == 2){name = "scissors"}
-            self.computerDisplay.image = UIImage(named:name)
+            if(computerChoice == 0){
+                name = "rock"
+                
+            }
+            if(computerChoice == 1){
+                name = "paper"
+                
+            }
+            if(computerChoice == 2){
+                name = "scissors"
+                
+            }
+            self.computerDisplay.image = self.choices[computerChoice].image
             var result:String = ""
             //win
             if((myChoice == 0 && computerChoice == 2) || (myChoice == 1 && computerChoice == 0) || (myChoice == 2 && computerChoice == 1)){
@@ -83,7 +98,62 @@ class ViewController: UIViewController, SFSafariViewControllerDelegate
             }
         }
     }
-    
-
+    @IBAction func doubleTap(_ sender: UITapGestureRecognizer) {
+        var location = sender.location(in: self.choicesStackView)
+        for item in self.choices{
+            if item.frame.contains(location){
+                if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum){
+                    imagePicker.delegate = self
+                    imagePicker.sourceType = .savedPhotosAlbum
+                    imagePicker.allowsEditing = false
+                    
+                    self.present(imagePicker, animated: true, completion: nil);
+                    self.imgToChange = item
+                    self.typeOfSelection = "Select"
+                    
+                }
+            }
+        }
+    }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if typeOfSelection == "Select"{
+            let image:UIImage? = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+            if image != nil{
+                self.imgToChange?.image = image
+                return
+            }
+        } else {
+            let image = info[.originalImage] as? UIImage
+            print("\n\n\(info)\n\n")
+            if image != nil{
+                self.imgToChange?.image = image
+            }
+            self.presentingCamera = false
+        }
+        
+        self.dismiss(animated: true, completion: nil)
+    }
+    @IBAction func longPress(_ sender: UITapGestureRecognizer) {
+        let location = sender.location(in:self.choicesStackView)
+        for item in self.choices{
+            if item.frame.contains(location){
+                if UIImagePickerController.availableCaptureModes(for: .rear) != nil{
+                    if(!self.presentingCamera){
+                        cameraPopup.sourceType = .camera
+                        cameraPopup.allowsEditing = false
+                        cameraPopup.delegate = self
+                        cameraPopup.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera)!
+                        presentingCamera = true
+                        present(cameraPopup, animated: true)
+                        self.typeOfSelection = "Camera"
+                        self.imgToChange = item
+                    }
+                } else {
+                    print("No Camera Available")
+                }
+            }
+        }
+    }
 }
 

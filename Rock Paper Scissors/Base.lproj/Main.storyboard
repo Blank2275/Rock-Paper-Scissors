@@ -43,6 +43,8 @@
                                 </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="o5p-Sn-Lcq" appends="YES" id="lEK-fp-648"/>
+                                    <outletCollection property="gestureRecognizers" destination="Xqi-Ih-wMd" appends="YES" id="4lm-R8-Eu6"/>
+                                    <outletCollection property="gestureRecognizers" destination="RL2-eb-rhc" appends="YES" id="mKO-xl-Z5q"/>
                                 </connections>
                             </stackView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="f90-3V-uKp">
@@ -126,11 +128,21 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="o5p-Sn-Lcq">
+                <tapGestureRecognizer id="o5p-Sn-Lcq" userLabel="Tap View Controller">
                     <connections>
                         <action selector="ChoiceSelected:" destination="BYZ-38-t0r" id="oyV-ml-4zG"/>
                     </connections>
                 </tapGestureRecognizer>
+                <tapGestureRecognizer numberOfTapsRequired="2" id="Xqi-Ih-wMd">
+                    <connections>
+                        <action selector="doubleTap:" destination="BYZ-38-t0r" id="86g-bu-SQz"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="RL2-eb-rhc">
+                    <connections>
+                        <action selector="longPress:" destination="BYZ-38-t0r" id="St5-pI-4TS"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="107" y="75"/>
         </scene>
