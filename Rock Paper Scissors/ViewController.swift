@@ -92,13 +92,11 @@ class ViewController: UIViewController, SFSafariViewControllerDelegate, UIImageP
         timeElapsed += 0.1
         self.timerLabel.text = "\(round((timeAllowed - timeElapsed) * 10) / 10)"
         if timeElapsed >= timeAllowed - 0.1{
-            if myChoice == -1{
                 //lose
                 self.resultText.text = "Timed Out :("
                 timer?.invalidate()
                 timer = nil
                 timeElapsed = timeAllowed
-            }
         }
     }
     @IBAction func doubleTap(_ sender: UITapGestureRecognizer) {
