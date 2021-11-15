@@ -83,7 +83,9 @@ class ViewController: UIViewController, SFSafariViewControllerDelegate, UIImageP
         timeElapsed = 0.0
         self.resultText.text = "Result"
         self.computerDisplay.image = nil
-        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(countDown), userInfo: nil, repeats: true)
+        if timer == nil{
+            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(countDown), userInfo: nil, repeats: true)
+        }
         
     }
     @objc func countDown(){
@@ -95,6 +97,7 @@ class ViewController: UIViewController, SFSafariViewControllerDelegate, UIImageP
                 self.resultText.text = "Timed Out :("
                 timer?.invalidate()
                 timer = nil
+                timeElapsed = timeAllowed
             }
         }
     }
